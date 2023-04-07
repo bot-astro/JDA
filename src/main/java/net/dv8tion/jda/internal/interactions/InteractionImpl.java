@@ -22,17 +22,22 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.Channel;
 import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
+import net.dv8tion.jda.api.entities.entitlement.Entitlement;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.Interaction;
+import net.dv8tion.jda.api.utils.data.DataArray;
 import net.dv8tion.jda.api.utils.data.DataObject;
 import net.dv8tion.jda.internal.JDAImpl;
 import net.dv8tion.jda.internal.entities.GuildImpl;
 import net.dv8tion.jda.internal.entities.MemberImpl;
 import net.dv8tion.jda.internal.entities.UserImpl;
 import net.dv8tion.jda.internal.entities.channel.concrete.PrivateChannelImpl;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InteractionImpl implements Interaction
 {
@@ -43,6 +48,8 @@ public class InteractionImpl implements Interaction
     protected final Member member;
     protected final User user;
     protected final Channel channel;
+    protected final List<String> entitlementSkuIds;
+    protected final List<Entitlement> entitlements;
     protected final DiscordLocale userLocale;
     protected final JDAImpl api;
 
@@ -88,6 +95,22 @@ public class InteractionImpl implements Interaction
                 ((UserImpl) user).setPrivateChannel(channel);
             }
             this.user = user;
+        }
+
+        // Sku Ids
+        DataArray entitlementSkuIdsArray = data.getArray("entitlements");
+        entitlementSkuIds = new ArrayList<>();
+
+        for (int i=0; i<entitlementSkuIdsArray.length(); i++) {
+            entitlementSkuIds.add(entitlementSkuIdsArray.getString(i));
+        }
+
+        // Entitlements
+        DataArray entitlementsArray = data.getArray("entitlements");
+        entitlements = new ArrayList<>();
+
+        for (int i=0; i<entitlementsArray.length(); i++) {
+            entitlements.add(new Entitlement(entitlementsArray.getObject(i)));
         }
     }
 
@@ -167,5 +190,19 @@ public class InteractionImpl implements Interaction
     public JDA getJDA()
     {
         return api;
+    }
+
+    @NotNull
+    @Override
+    public List<String> getEntitlementSkuIds()
+    {
+        return entitlementSkuIds;
+    }
+
+    @NotNull
+    @Override
+    public List<Entitlement> getEntitlements()
+    {
+        return entitlements;
     }
 }
