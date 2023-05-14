@@ -48,7 +48,6 @@ public class InteractionImpl implements Interaction
     protected final Member member;
     protected final User user;
     protected final Channel channel;
-    protected final List<String> entitlementSkuIds;
     protected final List<Entitlement> entitlements;
     protected final DiscordLocale userLocale;
     protected final JDAImpl api;
@@ -95,14 +94,6 @@ public class InteractionImpl implements Interaction
                 ((UserImpl) user).setPrivateChannel(channel);
             }
             this.user = user;
-        }
-
-        // Sku Ids
-        DataArray entitlementSkuIdsArray = data.getArray("entitlement_sku_ids");
-        entitlementSkuIds = new ArrayList<>();
-
-        for (int i=0; i<entitlementSkuIdsArray.length(); i++) {
-            entitlementSkuIds.add(entitlementSkuIdsArray.getString(i));
         }
 
         // Entitlements
@@ -190,13 +181,6 @@ public class InteractionImpl implements Interaction
     public JDA getJDA()
     {
         return api;
-    }
-
-    @NotNull
-    @Override
-    public List<String> getEntitlementSkuIds()
-    {
-        return entitlementSkuIds;
     }
 
     @NotNull

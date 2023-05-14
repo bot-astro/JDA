@@ -222,8 +222,5 @@ public interface Interaction extends ISnowflake
     JDA getJDA();
 
     @Nonnull
-    List<String> getEntitlementSkuIds();
-
-    @Nonnull
     List<Entitlement> getEntitlements();
 }
