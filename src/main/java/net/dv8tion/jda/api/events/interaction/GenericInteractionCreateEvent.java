@@ -106,13 +106,6 @@ public class GenericInteractionCreateEvent extends Event implements Interaction
 
     @NotNull
     @Override
-    public List<String> getEntitlementSkuIds()
-    {
-        return interaction.getEntitlementSkuIds();
-    }
-
-    @NotNull
-    @Override
     public List<Entitlement> getEntitlements()
     {
         return interaction.getEntitlements();
