@@ -18,13 +18,17 @@ package net.dv8tion.jda.api.requests;
 
 import net.dv8tion.jda.internal.JDAImpl;
 import net.dv8tion.jda.internal.requests.RestActionImpl;
-import net.dv8tion.jda.internal.requests.Route;
 import okhttp3.RequestBody;
 import org.apache.commons.collections4.map.CaseInsensitiveMap;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BooleanSupplier;
 
+/**
+ * Implementation of {@link CompletableFuture} used for {@link RestAction#submit()}.
+ *
+ * @param <T> The result type
+ */
 public class RestFuture<T> extends CompletableFuture<T>
 {
     final Request<T> request;

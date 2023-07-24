@@ -19,6 +19,7 @@ package net.dv8tion.jda.internal.entities;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
+import net.dv8tion.jda.api.requests.Route;
 import net.dv8tion.jda.api.requests.restaction.CacheRestAction;
 import net.dv8tion.jda.api.utils.MiscUtil;
 import net.dv8tion.jda.api.utils.data.DataObject;
@@ -26,7 +27,6 @@ import net.dv8tion.jda.internal.JDAImpl;
 import net.dv8tion.jda.internal.entities.channel.concrete.PrivateChannelImpl;
 import net.dv8tion.jda.internal.requests.DeferredRestAction;
 import net.dv8tion.jda.internal.requests.RestActionImpl;
-import net.dv8tion.jda.internal.requests.Route;
 import net.dv8tion.jda.internal.utils.EntityString;
 import net.dv8tion.jda.internal.utils.Helpers;
 
@@ -43,12 +43,12 @@ public class UserImpl extends UserSnowflakeImpl implements User
 
     protected short discriminator;
     protected String name;
+    protected String globalName;
     protected String avatarId;
     protected Profile profile;
     protected long privateChannelId = 0L;
     protected boolean bot;
     protected boolean system;
-    protected boolean fake = false;
     protected int flags;
 
     public UserImpl(long id, JDAImpl api)
@@ -62,6 +62,13 @@ public class UserImpl extends UserSnowflakeImpl implements User
     public String getName()
     {
         return name;
+    }
+
+    @Nullable
+    @Override
+    public String getGlobalName()
+    {
+        return globalName;
     }
 
     @Nonnull
@@ -104,7 +111,8 @@ public class UserImpl extends UserSnowflakeImpl implements User
     @Override
     public String getDefaultAvatarId()
     {
-        return String.valueOf(discriminator % 5);
+        // Backwards compatibility with old discriminator system
+        return discriminator != 0 ? String.valueOf(discriminator % 5) : super.getDefaultAvatarId();
     }
 
     @Nonnull
@@ -199,9 +207,15 @@ public class UserImpl extends UserSnowflakeImpl implements User
         return this;
     }
 
-    public UserImpl setDiscriminator(String discriminator)
+    public UserImpl setGlobalName(String globalName)
     {
-        this.discriminator = Short.parseShort(discriminator);
+        this.globalName = globalName;
+        return this;
+    }
+
+    public UserImpl setDiscriminator(short discriminator)
+    {
+        this.discriminator = discriminator;
         return this;
     }
 
@@ -236,16 +250,15 @@ public class UserImpl extends UserSnowflakeImpl implements User
         return this;
     }
 
-    public UserImpl setFake(boolean fake)
-    {
-        this.fake = fake;
-        return this;
-    }
-    
     public UserImpl setFlags(int flags)
     {
         this.flags = flags;
         return this;
+    }
+
+    public short getDiscriminatorInt()
+    {
+        return discriminator;
     }
 
     @Override
@@ -258,6 +271,10 @@ public class UserImpl extends UserSnowflakeImpl implements User
         String out;
         if (!alt)
             out = getAsMention();
+        else if (discriminator == 0 && upper)
+            out = getName().toUpperCase();
+        else if (discriminator == 0)
+            out = getName();
         else if (upper)
             out = getAsTag().toUpperCase();
         else

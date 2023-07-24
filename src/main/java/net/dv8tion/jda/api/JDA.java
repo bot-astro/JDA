@@ -16,6 +16,8 @@
 
 package net.dv8tion.jda.api;
 
+import net.dv8tion.jda.annotations.ForRemoval;
+import net.dv8tion.jda.annotations.Incubating;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.Channel;
 import net.dv8tion.jda.api.entities.channel.attribute.IGuildChannelContainer;
@@ -33,6 +35,7 @@ import net.dv8tion.jda.api.managers.DirectAudioController;
 import net.dv8tion.jda.api.managers.Presence;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.Route;
 import net.dv8tion.jda.api.requests.restaction.*;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.MiscUtil;
@@ -42,7 +45,6 @@ import net.dv8tion.jda.api.utils.cache.SnowflakeCacheView;
 import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import net.dv8tion.jda.internal.requests.CompletedRestAction;
 import net.dv8tion.jda.internal.requests.RestActionImpl;
-import net.dv8tion.jda.internal.requests.Route;
 import net.dv8tion.jda.internal.utils.Checks;
 import net.dv8tion.jda.internal.utils.EntityString;
 import net.dv8tion.jda.internal.utils.Helpers;
@@ -572,7 +574,7 @@ public interface JDA extends IGuildChannelContainer
      * This uses the {@link net.dv8tion.jda.api.hooks.InterfacedEventManager InterfacedEventListener} by default.
      * To switch to the {@link net.dv8tion.jda.api.hooks.AnnotatedEventManager AnnotatedEventManager}, use {@link #setEventManager(IEventManager)}.
      *
-     * Note: when using the {@link net.dv8tion.jda.api.hooks.InterfacedEventManager InterfacedEventListener} (default),
+     * <p>Note: when using the {@link net.dv8tion.jda.api.hooks.InterfacedEventManager InterfacedEventListener} (default),
      * given listener <b>must</b> be instance of {@link net.dv8tion.jda.api.hooks.EventListener EventListener}!
      *
      * @param  listeners
@@ -1028,8 +1030,14 @@ public interface JDA extends IGuildChannelContainer
      *         If the provided tag is null or not in the described format
      *
      * @return The {@link net.dv8tion.jda.api.entities.User} for the discord tag or null if no user has the provided tag
+     *
+     * @deprecated This will become obsolete in the future.
+     *             Discriminators are being phased out and replaced by globally unique usernames.
+     *             For more information, see <a href="https://support.discord.com/hc/en-us/articles/12620128861463" target="_blank">New Usernames &amp; Display Names</a>.
      */
     @Nullable
+    @Deprecated
+    @ForRemoval
     default User getUserByTag(@Nonnull String tag)
     {
         Checks.notNull(tag, "Tag");
@@ -1061,8 +1069,14 @@ public interface JDA extends IGuildChannelContainer
      *         If the provided arguments are null or not in the described format
      *
      * @return The {@link net.dv8tion.jda.api.entities.User} for the discord tag or null if no user has the provided tag
+     *
+     * @deprecated This will become obsolete in the future.
+     *             Discriminators are being phased out and replaced by globally unique usernames.
+     *             For more information, see <a href="https://support.discord.com/hc/en-us/articles/12620128861463" target="_blank">New Usernames &amp; Display Names</a>.
      */
     @Nullable
+    @Deprecated
+    @ForRemoval
     default User getUserByTag(@Nonnull String username, @Nonnull String discriminator)
     {
         Checks.notNull(username, "Username");
@@ -1092,8 +1106,11 @@ public interface JDA extends IGuildChannelContainer
      *         Whether to ignore case or not when comparing the provided name to each {@link net.dv8tion.jda.api.entities.User#getName()}.
      *
      * @return Possibly-empty immutable list of {@link net.dv8tion.jda.api.entities.User Users} that all have the same name as the provided name.
+     *
+     * @incubating This will be replaced in the future when the rollout of globally unique usernames has been completed.
      */
     @Nonnull
+    @Incubating
     default List<User> getUsersByName(@Nonnull String name, boolean ignoreCase)
     {
         return getUserCache().getElementsByName(name, ignoreCase);
@@ -1567,6 +1584,9 @@ public interface JDA extends IGuildChannelContainer
      * <br>This will fail with {@link net.dv8tion.jda.api.requests.ErrorResponse#UNKNOWN_USER UNKNOWN_USER}
      * if the user does not exist.
      *
+     * <p>If the channel is cached, this will directly return the channel in a completed {@link RestAction} without making a request.
+     * You can use {@link CacheRestAction#useCache(boolean) action.useCache(false)} to force an update.
+     *
      * <p><b>Example</b><br>
      * <pre>{@code
      * public void sendMessage(JDA jda, String userId, String content) {
@@ -1590,7 +1610,7 @@ public interface JDA extends IGuildChannelContainer
      */
     @Nonnull
     @CheckReturnValue
-    default RestAction<PrivateChannel> openPrivateChannelById(@Nonnull String userId)
+    default CacheRestAction<PrivateChannel> openPrivateChannelById(@Nonnull String userId)
     {
         return openPrivateChannelById(MiscUtil.parseSnowflake(userId));
     }
@@ -1863,21 +1883,9 @@ public interface JDA extends IGuildChannelContainer
     //AuditableRestAction<Void> installAuxiliaryCable(int port);
 
     /**
-     * The {@link net.dv8tion.jda.api.AccountType} of the currently logged in account.
-     * <br>Used when determining functions that are restricted based on the type of account.
-     *
-     * @return The current AccountType.
-     */
-    @Nonnull
-    AccountType getAccountType();
-
-    /**
      * Retrieves the {@link ApplicationInfo ApplicationInfo} for
      * the application that owns the logged in Bot-Account.
      * <br>This contains information about the owner of the currently logged in bot account!
-     *
-     * @throws net.dv8tion.jda.api.exceptions.AccountTypeException
-     *         If the currently logged in account is not from {@link net.dv8tion.jda.api.AccountType#BOT AccountType.BOT}
      *
      * @return {@link net.dv8tion.jda.api.requests.RestAction RestAction} - Type: {@link ApplicationInfo ApplicationInfo}
      *         <br>The {@link ApplicationInfo ApplicationInfo} of the bot's application.
@@ -1931,9 +1939,6 @@ public interface JDA extends IGuildChannelContainer
      *         The permissions to use in your invite, these can be changed by the link user.
      *         <br>If no permissions are provided the {@code permissions} parameter is omitted
      *
-     * @throws net.dv8tion.jda.api.exceptions.AccountTypeException
-     *         If the currently logged in account is not from {@link net.dv8tion.jda.api.AccountType#BOT AccountType.BOT}
-     *
      * @return A valid OAuth2 invite url for the currently logged in Bot-Account
      */
     @Nonnull
@@ -1949,9 +1954,6 @@ public interface JDA extends IGuildChannelContainer
      * @param  permissions
      *         The permissions to use in your invite, these can be changed by the link user.
      *         <br>If no permissions are provided the {@code permissions} parameter is omitted
-     *
-     * @throws net.dv8tion.jda.api.exceptions.AccountTypeException
-     *         If the currently logged in account is not from {@link net.dv8tion.jda.api.AccountType#BOT AccountType.BOT}
      *
      * @return A valid OAuth2 invite url for the currently logged in Bot-Account
      */

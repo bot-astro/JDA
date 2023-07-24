@@ -16,14 +16,14 @@
 
 package net.dv8tion.jda.internal.managers;
 
-import net.dv8tion.jda.api.entities.ScheduledEvent;
 import net.dv8tion.jda.api.entities.Icon;
+import net.dv8tion.jda.api.entities.ScheduledEvent;
 import net.dv8tion.jda.api.entities.channel.concrete.StageChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.managers.ScheduledEventManager;
+import net.dv8tion.jda.api.requests.Route;
 import net.dv8tion.jda.api.utils.data.DataObject;
-import net.dv8tion.jda.internal.requests.Route;
 import net.dv8tion.jda.internal.utils.Checks;
 import net.dv8tion.jda.internal.utils.Helpers;
 import okhttp3.RequestBody;
@@ -215,11 +215,9 @@ public class ScheduledEventManagerImpl extends ManagerBase<ScheduledEventManager
     {
         if (shouldUpdate(LOCATION))
         {
-            Checks.check(getScheduledEvent().getStatus() == ScheduledEvent.Status.SCHEDULED, "Cannot update location of non-scheduled event.");
+            Checks.check(getScheduledEvent().getStatus() == ScheduledEvent.Status.SCHEDULED || (entityType == ScheduledEvent.Type.EXTERNAL && getScheduledEvent().getType() == ScheduledEvent.Type.EXTERNAL), "Cannot update location type or location channel of non-scheduled event.");
             if (entityType == ScheduledEvent.Type.EXTERNAL && endTime == null && getScheduledEvent().getEndTime() == null)
                 throw new IllegalStateException("Missing required parameter: End Time");
-            if (entityType == ScheduledEvent.Type.EXTERNAL)
-                Checks.check((endTime != null ? endTime : getScheduledEvent().getEndTime()).isAfter(startTime), "Cannot schedule event to end before starting!");
         }
 
         if (shouldUpdate(START_TIME))

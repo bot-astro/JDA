@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-package net.dv8tion.jda.internal.requests;
-
-public enum Method
-{
-    DELETE,
-    GET,
-    HEAD,
-    OPTIONS,
-    POST,
-    PUT,
-    PATCH
-}
+/**
+ * Abstractions for interaction events.
+ *
+ * <p>Usually a more concrete event is desired.
+ */
+package net.dv8tion.jda.api.events.interaction;

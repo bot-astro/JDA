@@ -25,6 +25,7 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.requests.Request;
 import net.dv8tion.jda.api.requests.Response;
 import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.requests.Route;
 import net.dv8tion.jda.api.utils.MiscUtil;
 import net.dv8tion.jda.api.utils.TimeUtil;
 import net.dv8tion.jda.api.utils.data.DataArray;
@@ -32,7 +33,6 @@ import net.dv8tion.jda.api.utils.data.DataObject;
 import net.dv8tion.jda.internal.JDAImpl;
 import net.dv8tion.jda.internal.entities.EntityBuilder;
 import net.dv8tion.jda.internal.requests.RestActionImpl;
-import net.dv8tion.jda.internal.requests.Route;
 import net.dv8tion.jda.internal.utils.Checks;
 import net.dv8tion.jda.internal.utils.JDALogger;
 import org.apache.commons.collections4.map.ListOrderedMap;
@@ -252,7 +252,6 @@ public class MessageHistory
      *         The the {@code amount} is less than {@code 1} or greater than {@code 100}.
      * @throws java.lang.IllegalStateException
      *         If no messages have been retrieved by this MessageHistory.
-     *
      *
      * @return {@link net.dv8tion.jda.api.requests.RestAction RestAction} -
      *         Type: {@link java.util.List List}{@literal <}{@link net.dv8tion.jda.api.entities.Message Message}{@literal >}

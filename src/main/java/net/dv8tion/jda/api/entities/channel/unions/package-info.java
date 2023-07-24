@@ -14,13 +14,7 @@
  * limitations under the License.
  */
 
-package net.dv8tion.jda.internal.requests.ratelimit;
-
-import net.dv8tion.jda.api.requests.Request;
-
-import java.util.Queue;
-
-public interface IBucket
-{
-    Queue<Request> getRequests();
-}
+/**
+ * Union types used for simple casting to more concrete types.
+ */
+package net.dv8tion.jda.api.entities.channel.unions;

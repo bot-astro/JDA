@@ -25,7 +25,6 @@ import net.dv8tion.jda.api.exceptions.RateLimitedException;
 import net.dv8tion.jda.internal.JDAImpl;
 import net.dv8tion.jda.internal.requests.CallbackContext;
 import net.dv8tion.jda.internal.requests.RestActionImpl;
-import net.dv8tion.jda.internal.requests.Route;
 import net.dv8tion.jda.internal.utils.IOUtil;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -38,6 +37,11 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
+/**
+ * Internal class used for representing HTTP requests.
+ *
+ * @param <T> The expected type of the response
+ */
 public class Request<T>
 {
     private final JDAImpl api;
@@ -269,6 +273,8 @@ public class Request<T>
 
     public void cancel()
     {
+        if (!this.isCancelled)
+            onCancelled();
         this.isCancelled = true;
     }
 
