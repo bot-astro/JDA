@@ -362,11 +362,11 @@ fun generatePom(pom: Pom) {
     pom.packaging = "jar"
     pom.name.set(project.name)
     pom.description.set("Java wrapper for the popular chat & VOIP service: Discord https://discord.com")
-    pom.url.set("https://github.com/discord-jda/JDA")
+    pom.url.set("https://github.com/DV8FromTheWorld/JDA")
     pom.scm {
-        url.set("https://github.com/discord-jda/JDA")
-        connection.set("scm:git:git://github.com/discord-jda/JDA")
-        developerConnection.set("scm:git:ssh:git@github.com:discord-jda/JDA")
+        url.set("https://github.com/DV8FromTheWorld/JDA")
+        connection.set("scm:git:git://github.com/DV8FromTheWorld/JDA")
+        developerConnection.set("scm:git:ssh:git@github.com:DV8FromTheWorld/JDA")
     }
     pom.licenses {
         license {
@@ -409,17 +409,11 @@ publishing {
         }
     }
     publications {
-        register("Release", MavenPublication::class) {
+        register("mavenJava", MavenPublication::class) {
             from(components["java"])
 
-            artifactId = project.name
-            groupId = project.group as String
-            version = project.version as String
-
             artifact(sourcesJar)
-            artifact(javadocJar)
-
-            generatePom(pom)
+            artifactId = "jda"
         }
     }
 }
