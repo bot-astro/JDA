@@ -294,6 +294,13 @@ public RestAction<Void> selfDestruct(MessageChannel channel, String content) {
 ### More Examples
 
 We provide a small set of Examples in the [Example Directory](https://github.com/discord-jda/JDA/tree/master/src/examples/java).
+<!--
+TODO: Find good examples
+- [JDA Butler](https://github.com/Almighty-Alpaca/JDA-Butler)
+
+[And many more!](https://github.com/search?q=JDA+discord+bot&type=Repositories&utf8=%E2%9C%93)
+-->
+
 
 ## Sharding a Bot
 
@@ -306,6 +313,9 @@ For instance, the first of 2 shards would be `0 / 2` and the second would be `1 
 
 If you want to use sharding with your bot, make use of the [DefaultShardManager](https://docs.jda.wiki/net/dv8tion/jda/api/sharding/DefaultShardManager.html) as seen in the example below.
 This manager automatically assigns the right number of shards to your bot, so you do not need to do any math yourself.
+The [`SessionController`](https://docs.jda.wiki/net/dv8tion/jda/api/utils/SessionController.html) is a tool of the JDABuilder
+that allows to control state and behaviour between shards (sessions). When using multiple builders to build shards you have to create one instance
+of this controller and add the same instance to each builder: `builder.setSessionController(controller)`
 
 Internally, this shard manager also handles the proper scaling of threads for connections and handles the login rate-limit (Identify Rate-Limit) to properly startup without issues.
 
@@ -479,6 +489,8 @@ There is a guide for logback-classic available in our wiki: [Logging Setup](http
 
 Docs can be found on the [GitHub Pages][docs]
 <br>We also have a wiki filled with information and troubleshooting guides at [jda.wiki][wiki]
+Docs can be found on the [Jenkins][jenkins] or directly [here](https://docs.jda.wiki/)
+<br>A simple Wiki can also be found at [jda.wiki](https://jda.wiki/)
 
 ### Annotations
 
@@ -580,6 +592,7 @@ More can be found in our github organization: [JDA-Applications](https://github.
 If you want to contribute to JDA, make sure to base your branch off of our **master** branch (or a feature-branch)
 and create your PR into that **same** branch.
 
+
 More information can be found at the wiki page [Contributing](https://jda.wiki/contributing/contributing/).
 
 ## Versioning and Deprecation Policy
@@ -607,6 +620,9 @@ The method `changeFoo` was deprecated in release `5.1.2` and is going to be remo
 
 Sometimes, a feature might be removed without a replacement. This will be clearly explained in the documentation.
 
+
+The `RR` in version `3.4.RR` should be replaced by the latest version that was published for `3.4`, you can find out which the latest
+version was by looking at the [release page](https://github.com/discord-jda/JDA/releases)
 
 ## Dependencies:
 

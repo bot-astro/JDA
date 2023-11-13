@@ -198,7 +198,7 @@ public class InteractionHookImpl extends AbstractWebhookClient<Message> implemen
         action.setCheck(this::checkExpired);
         return onReady(action);
     }
-
+    
     private boolean checkExpired()
     {
         if (isExpired())

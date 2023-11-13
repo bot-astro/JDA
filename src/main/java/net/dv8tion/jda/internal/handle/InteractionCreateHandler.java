@@ -76,6 +76,15 @@ public class InteractionCreateHandler extends SocketHandler
             WebSocketClient.LOG.debug("Discarding INTERACTION_CREATE event from unexpected channel type. Channel: {}", channelJson);
             return null;
         }
+        else
+        {
+            ChannelType channelType = ChannelType.fromId(channelJson.getInt("type"));
+            if (!channelType.isMessage() || channelType == ChannelType.GROUP)
+            {
+                WebSocketClient.LOG.debug("Discarding INTERACTION_CREATE event from unexpected channel type. Channel: {}", channelJson);
+                return null;
+            }
+        }
 
         switch (InteractionType.fromKey(type))
         {

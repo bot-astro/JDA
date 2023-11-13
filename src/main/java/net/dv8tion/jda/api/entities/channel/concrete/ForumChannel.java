@@ -83,6 +83,7 @@ public interface ForumChannel extends StandardGuildChannel, IPostContainer, IWeb
     Layout getDefaultLayout();
 
     /**
+
      * The layout used to sort forum posts.
      */
     enum Layout
