@@ -90,6 +90,12 @@ public class GenericInteractionCreateEvent extends Event implements Interaction
         return interaction.getChannel();
     }
 
+    @Override
+    public long getChannelIdLong()
+    {
+        return interaction.getChannelIdLong();
+    }
+
     @Nonnull
     @Override
     public DiscordLocale getUserLocale()

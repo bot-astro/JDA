@@ -40,7 +40,7 @@ plugins {
 }
 
 val javaVersion = JavaVersion.current()
-val versionObj = Version(major = "5", minor = "0", revision = "0", classifier = "beta.6.astro.7")
+val versionObj = Version(major = "5", minor = "0", revision = "0", classifier = "beta.17.astro.8")
 val isCI = System.getProperty("BUILD_NUMBER") != null // jenkins
         || System.getenv("BUILD_NUMBER") != null
         || System.getProperty("GIT_COMMIT") != null // jitpack
@@ -134,6 +134,7 @@ dependencies {
     }
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+    testImplementation("org.reflections:reflections:0.10.2")
 }
 
 val compileJava: JavaCompile by tasks
@@ -362,11 +363,11 @@ fun generatePom(pom: Pom) {
     pom.packaging = "jar"
     pom.name.set(project.name)
     pom.description.set("Java wrapper for the popular chat & VOIP service: Discord https://discord.com")
-    pom.url.set("https://github.com/DV8FromTheWorld/JDA")
+    pom.url.set("https://github.com/discord-jda/JDA")
     pom.scm {
-        url.set("https://github.com/DV8FromTheWorld/JDA")
-        connection.set("scm:git:git://github.com/DV8FromTheWorld/JDA")
-        developerConnection.set("scm:git:ssh:git@github.com:DV8FromTheWorld/JDA")
+        url.set("https://github.com/discord-jda/JDA")
+        connection.set("scm:git:git://github.com/discord-jda/JDA")
+        developerConnection.set("scm:git:ssh:git@github.com:discord-jda/JDA")
     }
     pom.licenses {
         license {
@@ -411,7 +412,6 @@ publishing {
     publications {
         register("mavenJava", MavenPublication::class) {
             from(components["java"])
-
             artifact(sourcesJar)
             artifactId = "jda"
         }

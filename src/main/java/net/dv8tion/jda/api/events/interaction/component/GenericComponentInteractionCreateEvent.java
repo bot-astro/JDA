@@ -62,7 +62,7 @@ public class GenericComponentInteractionCreateEvent extends GenericInteractionCr
     @Override
     public MessageChannelUnion getChannel()
     {
-        return (MessageChannelUnion) interaction.getChannel();
+        return interaction.getChannel();
     }
 
     @Nonnull
